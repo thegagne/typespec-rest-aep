@@ -1,0 +1,45 @@
+{
+  "name": "@typespec-rest-aep/core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "tspMain": "lib/main.tsp",
+  "exports": {
+    ".": {
+      "typespec": "./lib/main.tsp",
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "lib/**/*.tsp",
+    "dist/**",
+    "!dist/test/**"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "example": "tsp compile examples/bookstore.tsp --emit @typespec/openapi3",
+    "lint:aep": "spectral lint tsp-output/@typespec/openapi3/openapi.yaml",
+    "test": "vitest run",
+    "watch": "tsc -p tsconfig.build.json --watch"
+  },
+  "peerDependencies": {
+    "@typespec/compiler": ">=0.65.0",
+    "@typespec/http": ">=0.65.0",
+    "@typespec/openapi": ">=0.65.0",
+    "@typespec/openapi3": ">=0.65.0",
+    "@typespec/rest": ">=0.65.0"
+  },
+  "devDependencies": {
+    "@aep_dev/aep-openapi-linter": "^0.5.1",
+    "@stoplight/spectral-cli": "latest",
+    "@typespec/compiler": "latest",
+    "@typespec/http": "latest",
+    "@typespec/openapi": "latest",
+    "@typespec/openapi3": "latest",
+    "@typespec/rest": "latest",
+    "typescript": "~5.6.3",
+    "vitest": "^2.0.0",
+    "yaml": "^2.8.2"
+  }
+}

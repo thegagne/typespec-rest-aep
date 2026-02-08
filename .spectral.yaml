@@ -1,0 +1,2 @@
+extends:
+  - "@aep_dev/aep-openapi-linter"

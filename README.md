@@ -9,6 +9,7 @@ import "@typespec-rest-aep/core";
 
 using TypeSpec.Http;
 using TypeSpec.Rest;
+using TypeSpec.Rest.Resource;
 using Aep;
 
 @service(#{ title: "Bookstore API" })
@@ -17,31 +18,54 @@ namespace BookstoreAPI;
 
 @aepResource("library.example.com/publisher", "publisher", "publishers")
 model Publisher {
-  @key("publisher") path: string;
-  displayName: string;
+  @doc("The unique identifier of the publisher.")
+  @example("acme-publishing")
+  @key("publisher") @visibility(Lifecycle.Read) id: string;
+  @doc("The full resource name of the publisher.")
+  @example("publishers/acme-publishing") path: string;
+  @doc("The display name of the publisher.")
+  @example("Acme Publishing") displayName: string;
 }
 
 @aepResource("library.example.com/book", "book", "books")
 @parentResource(Publisher)
 model Book {
-  @key("book") path: string;
-  title: string;
-  isbn: string;
+  @doc("The unique identifier of the book.")
+  @example("great-gatsby")
+  @key("book") @visibility(Lifecycle.Read) id: string;
+  @doc("The full resource name of the book.")
+  @example("books/great-gatsby") path: string;
+  @doc("The title of the book.")
+  @example("The Great Gatsby") title: string;
+  @doc("The ISBN of the book.")
+  @example("978-0-7432-7356-5") isbn: string;
 }
 
 interface Publishers extends AepResourceOperations<Publisher> {}
-interface Books extends AepResourceOperations<Book> {}
+interface Books extends AepResourceOperations<Book>, AepApply<Book> {
+  @doc("Archives a book.")
+  @autoRoute
+  @action("archive")
+  @actionSeparator(":")
+  @post
+  archive(...ResourceParameters<Book>): Book | AepError;
+}
 ```
 
 This generates OpenAPI 3.0 with:
 
-- Correct paths: `/publishers`, `/publishers/{publisher}`, `/publishers/{publisher}/books/{book}`
-- AEP operation IDs: `ListPublishers`, `GetPublisher`, `CreateBook`, `UpdateBook`, `DeleteBook`
+- Correct paths: `/publishers/{publisher}`, `/publishers/{publisher}/books/{book}`
+- AEP operation IDs: `ListPublishers`, `GetPublisher`, `CreateBook`, `UpdateBook`, `DeleteBook`, `ApplyBook`
+- Custom method: `POST /publishers/{publisher}/books/{book}:archive` with operationId `:ArchiveBook`
 - `x-aep-resource` extensions with type, singular, plural, and patterns
+- Root-level tags (alphabetically sorted) with descriptions
 - Pagination (`results` + `next_page_token`) on list operations
 - `application/merge-patch+json` for updates
 - `204 No Content` for deletes
-- AEP-193 error responses
+- AEP-193 error responses with examples for each status code
+- Operation examples for all CRUD operations
+- Schema-level examples on list response `results` properties
+- `requestBody` descriptions on create, update, and apply operations
 
 ## Installation
 
@@ -67,11 +91,38 @@ Marks a model as an AEP resource. This is the only decorator you need.
 | `singular` | Singular form of the resource name | `"book"` |
 | `plural` | Plural form (used as the URL collection segment) | `"books"` |
 
-Under the hood, `@aepResource` does the following:
+The library automatically handles:
 
 - Registers the model as a REST resource (via `@resource` from `@typespec/rest`)
 - Sets the `x-aep-resource` OpenAPI extension with `type`, `singular`, `plural`, and `patterns`
-- Generates AEP-compliant operation IDs for all CRUD operations
+- Generates AEP-compliant operation IDs, descriptions, and tags for all CRUD operations
+- Builds operation examples from `@example` values on model properties
+- Generates error response examples for each status code
+- Sets schema-level examples on list response properties
+- Auto-generates a model description if none is provided via `@doc`
+
+### Resource Model Convention
+
+Each AEP resource model should have:
+
+- An `id` property with `@key("name")` and `@visibility(Lifecycle.Read)` for URL routing
+- A `path` property for the full AEP resource name
+- `@doc` and `@example` on each property for schema documentation and examples
+
+```typespec
+@aepResource("example.com/widget", "widget", "widgets")
+model Widget {
+  @doc("The unique identifier of the widget.")
+  @example("my-widget")
+  @key("widget") @visibility(Lifecycle.Read) id: string;
+  @doc("The full resource name of the widget.")
+  @example("widgets/my-widget") path: string;
+  @doc("The display name of the widget.")
+  @example("My Widget") displayName: string;
+}
+```
+
+The `@key` parameter name controls the URL parameter name, and `@visibility(Lifecycle.Read)` keeps `id` out of create/update request bodies. The `path` property holds the full resource name (e.g., `publishers/acme/books/great-gatsby`).
 
 ### Template Interfaces
 
@@ -87,7 +138,7 @@ Use these to add standard CRUD operations to your resources:
 | `AepDelete<T>` | Delete | `DELETE /{id}` |
 | `AepApply<T>` | Create or replace (AEP-137) | `PUT /{id}` |
 
-`AepResourceOperations<T>` includes Get, List, Create, Update, and Delete. Apply is separate — compose it when needed:
+`AepResourceOperations<T>` includes Get, List, Create, Update, and Delete. Apply is separate -- compose it when needed:
 
 ```typespec
 // All standard CRUD operations
@@ -143,59 +194,21 @@ Use `@parentResource` from `@typespec/rest` to define parent-child relationships
 ```typespec
 @aepResource("example.com/publisher", "publisher", "publishers")
 model Publisher {
-  @key("publisher") path: string;
+  @key("publisher") @visibility(Lifecycle.Read) id: string;
+  path: string;
   name: string;
 }
 
 @aepResource("example.com/book", "book", "books")
 @parentResource(Publisher)
 model Book {
-  @key("book") path: string;
+  @key("book") @visibility(Lifecycle.Read) id: string;
+  path: string;
   title: string;
 }
 ```
 
 This generates nested paths like `/publishers/{publisher}/books/{book}` and sets the full pattern in `x-aep-resource`.
-
-### Key Naming Convention
-
-The `@key` parameter name controls the URL parameter name. Use snake_case names that match the singular resource name:
-
-```typespec
-@key("publisher") path: string;  // -> /publishers/{publisher}
-```
-
-The property name (`path`) becomes the schema property name in the OpenAPI output.
-
-### Extensibility
-
-TypeSpec interface composition supports flexible patterns:
-
-**Selective operations** — pick only what you need:
-
-```typespec
-interface Books extends AepGet<Book>, AepList<Book> {}  // read-only
-```
-
-**Custom methods alongside CRUD**:
-
-```typespec
-interface Books extends AepResourceOperations<Book> {
-  @doc("Archives a book.")
-  @autoRoute @action("archive") @actionSeparator(":") @post
-  archive(...ResourceParameters<Book>): Book | AepError;
-}
-```
-
-**Custom OpenAPI extensions on operations**:
-
-```typespec
-interface Books extends AepResourceOperations<Book> {
-  @extension("x-custom", "value")
-  @autoRoute @action("export") @actionSeparator(":") @post
-  export(...ResourceCollectionParameters<Book>): string | AepError;
-}
-```
 
 ## Validating with the AEP Linter
 
@@ -224,28 +237,30 @@ npx spectral lint tsp-output/@typespec/openapi3/openapi.yaml
 ```bash
 npm install
 npm run build    # Compile TypeScript
-npm test         # Run tests
-npm run watch    # Watch mode
+npm test         # Run tests (vitest)
+npm run example  # Compile the bookstore example
+npm run lint:aep # Lint the example output with AEP linter
+npm run watch    # Watch mode for TypeScript
 ```
 
 ## Project Structure
 
 ```
 lib/
-  main.tsp          # Library entry point
+  main.tsp          # Library entry point (imports JS + TSP files)
   decorators.tsp    # @aepResource decorator declaration
   models.tsp        # AepError, AepListResponse
   resource.tsp      # Template interfaces (AepGet, AepList, etc.)
 src/
-  lib.ts            # Library definition
-  decorators.ts     # @aepResource implementation
-  validate.ts       # $onValidate hook (sets operation IDs + extensions)
-  tsp-index.ts      # Decorator registry
-  index.ts          # Public exports
+  lib.ts            # Library definition (createTypeSpecLibrary)
+  decorators.ts     # @aepResource implementation + metadata accessors
+  validate.ts       # $onValidate hook (operation IDs, tags, examples, extensions)
+  tsp-index.ts      # Decorator registry ($decorators map, $onValidate export)
+  index.ts          # Public JS exports
 test/
-  basic.test.ts     # Tests
+  basic.test.ts     # Tests (16 tests covering all operations and features)
 examples/
-  bookstore.tsp     # Example API
+  bookstore.tsp     # Full bookstore example (Publisher + Book resources)
 ```
 
 ## License

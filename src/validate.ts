@@ -10,7 +10,7 @@ import type {
   ArrayValue,
   ObjectValuePropertyDescriptor,
 } from "@typespec/compiler";
-import { $doc, $tag, getExamples, isKey, listServices, navigateTypesInNamespace } from "@typespec/compiler";
+import { $doc, $tag, getDoc, getExamples, isKey, listServices, navigateTypesInNamespace } from "@typespec/compiler";
 import { $ } from "@typespec/compiler/typekit";
 import {
   getResourceOperation,
@@ -24,6 +24,7 @@ import { getAepResourceMetadata, type AepResourceMetadata } from "./decorators.j
 // Access the compiler's internal opExamples state using the global symbol registry.
 // The compiler uses Symbol.for("TypeSpec.opExamples") as the key.
 const opExamplesKey = Symbol.for("TypeSpec.opExamples");
+const examplesKey = Symbol.for("TypeSpec.examples");
 
 // Access @typespec/openapi's tagsMetadata state to set root-level tag descriptions.
 const tagsMetadataKey = Symbol.for("@typespec/openapi/tagsMetadata");
@@ -357,6 +358,47 @@ function setOpExample(
   list.push({ parameters, returnType });
 }
 
+/**
+ * Set an @example value on a model property by writing directly to the compiler's examples state.
+ */
+function setPropertyExample(program: Program, prop: ModelProperty, value: Value): void {
+  const stateMap = program.stateMap(examplesKey);
+  let examples = stateMap.get(prop) as { value: Value; title?: string }[] | undefined;
+  if (!examples) {
+    examples = [];
+    stateMap.set(prop, examples);
+  }
+  examples.push({ value });
+}
+
+/**
+ * Set an example on the `results` property of a list operation's response model.
+ */
+function setListResultsExample(
+  program: Program,
+  op: Operation,
+  model: Model,
+  metadata: AepResourceMetadata,
+): void {
+  const returnType = op.returnType;
+  if (returnType.kind !== "Union") return;
+
+  for (const variant of returnType.variants.values()) {
+    if (variant.type.kind !== "Model") continue;
+    const resultsProp = variant.type.properties.get("results");
+    if (!resultsProp) continue;
+
+    // Only set if not already set
+    const existing = program.stateMap(examplesKey).get(resultsProp);
+    if (existing) break;
+
+    const exampleItem = buildResourceExample(program, model, metadata);
+    const exampleArray = makeArrayValue(program, [exampleItem]);
+    setPropertyExample(program, resultsProp, exampleArray);
+    break;
+  }
+}
+
 const errorStatusCodes = [
   { code: 400, title: "Bad Request", detail: "The request was invalid." },
   { code: 401, title: "Unauthorized", detail: "Authentication is required." },
@@ -513,6 +555,11 @@ function setAepOperationId(program: Program, op: Operation): void {
       setOpExample(program, op, example);
     }
     setErrorExamples(program, op);
+
+    // Set example on list response `results` property for schema-level docs
+    if (resOp.operation === "list") {
+      setListResultsExample(program, op, resOp.resourceType, metadata);
+    }
     return;
   }
 
@@ -588,6 +635,11 @@ export function $onValidate(program: Program): void {
           type: metadata.type,
           patterns: [pattern],
         });
+
+        // Auto-generate a model description if none is provided
+        if (!getDoc(program, model)) {
+          $doc({ program } as any, model, `A ${metadata.singular} resource.`);
+        }
 
         ensureTagMetadata(program, service.type, metadata);
       },

@@ -5,10 +5,10 @@ namespace Aep;
  */
 model AepError {
   @TypeSpec.Http.statusCode _: 400 | 401 | 403 | 404 | 409 | 500;
-  @format("uri-reference") type?: string;
-  title?: string;
-  status?: int32;
-  detail?: string;
+  @format("uri-reference") @example("https://example.com/errors/bad-request") type?: string;
+  @example("Bad Request") title?: string;
+  @example(400) status?: int32;
+  @example("The request was invalid.") detail?: string;
 }
 
 /**

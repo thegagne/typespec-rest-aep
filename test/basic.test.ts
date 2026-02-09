@@ -30,7 +30,8 @@ describe("@aepResource decorator", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -48,7 +49,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -83,7 +85,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -117,14 +120,16 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/publisher", "publisher", "publishers")
       model Publisher {
-        @key("publisher") path: string;
+        @key("publisher") @visibility(Lifecycle.Read) id: string;
+        path: string;
         displayName: string;
       }
 
       @aepResource("test.example.com/book", "book", "books")
       @parentResource(Publisher)
       model Book {
-        @key("book") path: string;
+        @key("book") @visibility(Lifecycle.Read) id: string;
+        path: string;
         title: string;
       }
 
@@ -156,7 +161,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -176,7 +182,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -194,7 +201,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -216,7 +224,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -237,7 +246,8 @@ describe("OpenAPI output", () => {
 
       @aepResource("test.example.com/widget", "widget", "widgets")
       model Widget {
-        @key("widget") path: string;
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
         name: string;
       }
 
@@ -247,5 +257,197 @@ describe("OpenAPI output", () => {
     const createOp = openapi.paths["/widgets"].post;
     const paramNames = createOp.parameters.map((p: any) => p.name);
     expect(paramNames).toContain("id");
+  });
+
+  it("should generate PUT endpoint for AepApply with correct operationId", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget>, AepApply<Widget> {}
+    `);
+
+    // Apply should generate a PUT endpoint
+    expect(openapi.paths["/widgets/{widget}"].put).toBeDefined();
+    expect(openapi.paths["/widgets/{widget}"].put.operationId).toBe(
+      "ApplyWidget"
+    );
+
+    // PUT should have a request body referencing the Widget schema
+    expect(
+      openapi.paths["/widgets/{widget}"].put.requestBody.content[
+        "application/json"
+      ].schema.$ref
+    ).toBe("#/components/schemas/Widget");
+  });
+
+  it("should generate custom action with colon separator and correct operationId", async () => {
+    const restTester = tester
+      .importLibraries()
+      .using("Aep", "TypeSpec.Http", "TypeSpec.Rest", "TypeSpec.Rest.Resource")
+      .emit("@typespec/openapi3")
+      .pipe((result) => {
+        const yamlFile = Object.values(result.outputs).find((v) =>
+          v.includes("openapi:")
+        );
+        return parse(yamlFile!);
+      });
+
+    const openapi = await restTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {
+        @doc("Archives a widget.")
+        @autoRoute
+        @action("archive")
+        @actionSeparator(":")
+        @post
+        archive(...ResourceParameters<Widget>): Widget | AepError;
+      }
+    `);
+
+    // Custom action path uses colon separator
+    expect(openapi.paths).toHaveProperty("/widgets/{widget}:archive");
+
+    // Custom action has correct AEP-136 operation ID (starts with colon)
+    const archiveOp = openapi.paths["/widgets/{widget}:archive"].post;
+    expect(archiveOp.operationId).toBe(":ArchiveWidget");
+  });
+
+  it("should include example on Get operation response", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {}
+    `);
+
+    const getOp = openapi.paths["/widgets/{widget}"].get;
+    // The 200 response should have an example with resource fields
+    const response200 = getOp.responses["200"].content["application/json"];
+    expect(response200.example).toBeDefined();
+    expect(response200.example).toHaveProperty("path");
+    expect(response200.example).toHaveProperty("name");
+  });
+
+  it("should include example on List operation response", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {}
+    `);
+
+    const listOp = openapi.paths["/widgets"].get;
+    const response200 = listOp.responses["200"].content["application/json"];
+    expect(response200.example).toBeDefined();
+    expect(response200.example).toHaveProperty("results");
+    expect(response200.example.results).toBeInstanceOf(Array);
+    expect(response200.example.results.length).toBeGreaterThan(0);
+    expect(response200.example).toHaveProperty("next_page_token");
+  });
+
+  it("should include example on Create operation request body", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {}
+    `);
+
+    const createOp = openapi.paths["/widgets"].post;
+    const requestBody = createOp.requestBody.content["application/json"];
+    expect(requestBody.example).toBeDefined();
+    expect(requestBody.example).toHaveProperty("path");
+    expect(requestBody.example).toHaveProperty("name");
+  });
+
+  it("should use @example values from model properties in operation examples", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        @example("Acme Widget") name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {}
+    `);
+
+    const getOp = openapi.paths["/widgets/{widget}"].get;
+    const response200 = getOp.responses["200"].content["application/json"];
+    expect(response200.example.name).toBe("Acme Widget");
+    // path should still be auto-generated since no @example on it
+    expect(response200.example.path).toContain("my-widget");
+  });
+
+  it("should support selective interface composition (read-only)", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepGet<Widget>, AepList<Widget> {}
+    `);
+
+    // Only Get and List should exist
+    expect(openapi.paths["/widgets"].get).toBeDefined();
+    expect(openapi.paths["/widgets/{widget}"].get).toBeDefined();
+
+    // No Create, Update, or Delete
+    expect(openapi.paths["/widgets"].post).toBeUndefined();
+    expect(openapi.paths["/widgets/{widget}"].patch).toBeUndefined();
+    expect(openapi.paths["/widgets/{widget}"].delete).toBeUndefined();
+
+    // Operation IDs are still correct
+    expect(openapi.paths["/widgets"].get.operationId).toBe("ListWidgets");
+    expect(openapi.paths["/widgets/{widget}"].get.operationId).toBe(
+      "GetWidget"
+    );
   });
 });

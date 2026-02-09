@@ -15,7 +15,6 @@ using TypeSpec.OpenAPI;
  * @template Resource The AEP resource model.
  */
 interface AepGet<Resource extends {}> {
-  @doc("Gets a single resource.")
   @autoRoute
   @readsResource(Resource)
   get(...ResourceParameters<Resource>): Resource | AepError;
@@ -27,14 +26,17 @@ interface AepGet<Resource extends {}> {
  * @template Resource The AEP resource model.
  */
 interface AepList<Resource extends {}> {
-  @doc("Lists resources with pagination.")
   @autoRoute
   @listsResource(Resource)
   list(
     ...ResourceCollectionParameters<Resource>,
+    /** The maximum number of results to return per page. */
     @query max_page_size?: int32,
+    /** A page token from a previous list response, used to retrieve the next page. */
     @query page_token?: string,
+    /** An AEP-160 filter expression to restrict results. */
     @query filter?: string,
+    /** A comma-separated list of fields to order results by. */
     @query order_by?: string,
   ): AepListResponse<Resource> | AepError;
 }
@@ -45,11 +47,11 @@ interface AepList<Resource extends {}> {
  * @template Resource The AEP resource model.
  */
 interface AepCreate<Resource extends {}> {
-  @doc("Creates a new resource.")
   @autoRoute
   @createsResource(Resource)
   create(
     ...ResourceCollectionParameters<Resource>,
+    /** An optional client-provided identifier for the resource. */
     @query id?: string,
     @bodyRoot resource: Resource,
   ): Resource | AepError;
@@ -61,7 +63,6 @@ interface AepCreate<Resource extends {}> {
  * @template Resource The AEP resource model.
  */
 interface AepUpdate<Resource extends {}> {
-  @doc("Updates an existing resource using merge-patch semantics.")
   @autoRoute
   @updatesResource(Resource)
   @patch(#{ implicitOptionality: true })
@@ -78,12 +79,22 @@ interface AepUpdate<Resource extends {}> {
  * @template Resource The AEP resource model.
  */
 interface AepDelete<Resource extends {}> {
-  @doc("Deletes an existing resource.")
   @autoRoute
   @deletesResource(Resource)
   delete(...ResourceParameters<Resource>): {
     @TypeSpec.Http.statusCode _: 204;
   } | AepError;
+}
+
+/**
+ * Apply (create or replace) an AEP resource via PUT (AEP-137).
+ *
+ * @template Resource The AEP resource model.
+ */
+interface AepApply<Resource extends {}> {
+  @autoRoute
+  @createsOrReplacesResource(Resource)
+  apply(...ResourceParameters<Resource>, @bodyRoot resource: Resource): Resource | AepError;
 }
 
 /**

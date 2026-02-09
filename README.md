@@ -79,21 +79,55 @@ Use these to add standard CRUD operations to your resources:
 
 | Interface | Operations | HTTP |
 |-----------|-----------|------|
-| `AepResourceOperations<T>` | All five below | - |
+| `AepResourceOperations<T>` | Get, List, Create, Update, Delete | - |
 | `AepGet<T>` | Get by key | `GET /{id}` |
 | `AepList<T>` | List with pagination | `GET /` |
 | `AepCreate<T>` | Create with optional `id` | `POST /` |
 | `AepUpdate<T>` | Merge-patch update | `PATCH /{id}` |
 | `AepDelete<T>` | Delete | `DELETE /{id}` |
+| `AepApply<T>` | Create or replace (AEP-137) | `PUT /{id}` |
 
-You can use `AepResourceOperations<T>` for all five, or compose individual interfaces:
+`AepResourceOperations<T>` includes Get, List, Create, Update, and Delete. Apply is separate — compose it when needed:
 
 ```typespec
-// All operations
+// All standard CRUD operations
 interface Widgets extends AepResourceOperations<Widget> {}
+
+// CRUD + Apply (PUT)
+interface Widgets extends AepResourceOperations<Widget>, AepApply<Widget> {}
 
 // Read-only
 interface Widgets extends AepGet<Widget>, AepList<Widget> {}
+```
+
+### Custom Methods (AEP-136)
+
+Define custom actions using `@action` and `@actionSeparator(":")` from `@typespec/rest`:
+
+```typespec
+interface Books extends AepResourceOperations<Book> {
+  @doc("Archives a book.")
+  @autoRoute
+  @action("archive")
+  @actionSeparator(":")
+  @post
+  archive(...ResourceParameters<Book>): Book | AepError;
+}
+```
+
+This generates `POST /books/{book}:archive` with operationId `:ArchiveBook` (AEP-136 compliant).
+
+For collection-level actions, use `@collectionAction`:
+
+```typespec
+interface Books extends AepResourceOperations<Book> {
+  @doc("Imports books in bulk.")
+  @autoRoute
+  @collectionAction(Book, "import")
+  @actionSeparator(":")
+  @post
+  bulkImport(...ResourceCollectionParameters<Book>): {} | AepError;
+}
 ```
 
 ### Models
@@ -132,6 +166,36 @@ The `@key` parameter name controls the URL parameter name. Use snake_case names 
 ```
 
 The property name (`path`) becomes the schema property name in the OpenAPI output.
+
+### Extensibility
+
+TypeSpec interface composition supports flexible patterns:
+
+**Selective operations** — pick only what you need:
+
+```typespec
+interface Books extends AepGet<Book>, AepList<Book> {}  // read-only
+```
+
+**Custom methods alongside CRUD**:
+
+```typespec
+interface Books extends AepResourceOperations<Book> {
+  @doc("Archives a book.")
+  @autoRoute @action("archive") @actionSeparator(":") @post
+  archive(...ResourceParameters<Book>): Book | AepError;
+}
+```
+
+**Custom OpenAPI extensions on operations**:
+
+```typespec
+interface Books extends AepResourceOperations<Book> {
+  @extension("x-custom", "value")
+  @autoRoute @action("export") @actionSeparator(":") @post
+  export(...ResourceCollectionParameters<Book>): string | AepError;
+}
+```
 
 ## Validating with the AEP Linter
 

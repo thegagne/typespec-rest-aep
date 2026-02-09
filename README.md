@@ -13,7 +13,7 @@ using TypeSpec.Rest.Resource;
 using Aep;
 
 @service(#{ title: "Bookstore API" })
-@server("https://api.bookstore.example.com", "Production")
+@server("http://localhost:4010", "Mock server")
 namespace BookstoreAPI;
 
 @aepResource("library.example.com/publisher", "publisher", "publishers")
@@ -238,6 +238,47 @@ model Book {
 
 This generates nested paths like `/publishers/{publisher}/books/{book}` and sets the full pattern in `x-aep-resource`.
 
+## Try It Out
+
+You can test the generated API using [aepcli](https://github.com/aep-dev/aepcli), which auto-generates a CLI from any AEP-compliant OpenAPI spec, and a mock server powered by [Prism](https://github.com/stoplightio/prism).
+
+Build the example and start the mock server:
+
+```bash
+npm run build
+npm run example
+npm run mock
+```
+
+In another terminal, install aepcli and try some commands:
+
+```bash
+go install github.com/aep-dev/aepcli/cmd/aepcli@main
+```
+
+```bash
+# List available resources
+aepcli tsp-output/@typespec/openapi3/openapi.json --help
+
+# List publishers
+aepcli tsp-output/@typespec/openapi3/openapi.json publisher list
+
+# Create a publisher
+aepcli tsp-output/@typespec/openapi3/openapi.json publisher create acme-publishing \
+  --displayName "Acme Publishing" \
+  --path "publishers/acme-publishing"
+
+# List books under a publisher
+aepcli tsp-output/@typespec/openapi3/openapi.json book list --publisher acme-publishing
+
+# Create a book
+aepcli tsp-output/@typespec/openapi3/openapi.json book create great-gatsby \
+  --publisher acme-publishing \
+  --title "The Great Gatsby" \
+  --isbn "978-0-7432-7356-5" \
+  --path "publishers/acme-publishing/books/great-gatsby"
+```
+
 ## Validating with the AEP Linter
 
 Install the linter:
@@ -257,7 +298,7 @@ Compile and lint:
 
 ```bash
 tsp compile . --emit @typespec/openapi3
-npx spectral lint tsp-output/@typespec/openapi3/openapi.yaml
+npx spectral lint tsp-output/@typespec/openapi3/openapi.json
 ```
 
 ## Development
@@ -268,6 +309,7 @@ npm run build    # Compile TypeScript
 npm test         # Run tests (vitest)
 npm run example  # Compile the bookstore example
 npm run lint:aep # Lint the example output with AEP linter
+npm run mock     # Start a mock server on port 4010
 npm run watch    # Watch mode for TypeScript
 ```
 

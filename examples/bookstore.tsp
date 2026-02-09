@@ -9,7 +9,7 @@ using Aep;
 @doc("API for managing a bookstore.")
 @service(#{ title: "Bookstore API" })
 @info(#{ contact: #{ name: "Bookstore API Support", email: "support@bookstore.example.com", url: "https://example.com" }, license: #{ name: "MIT", url: "https://www.example.com/license" } })
-@server("https://api.bookstore.example.com", "Production server")
+@server("http://localhost:4010", "Mock server")
 namespace BookstoreAPI;
 
 @doc("A publisher of books")
@@ -60,5 +60,5 @@ interface Books extends AepResourceOperations<Book>, AepApply<Book> {
   @action("archive")
   @actionSeparator(":")
   @post
-  archive(...ResourceParameters<Book>): Book | AepError;
+  archive(...ResourceParameters<Book>, @bodyRoot body: {}): Book | AepError;
 }

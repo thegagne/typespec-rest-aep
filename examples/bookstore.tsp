@@ -19,6 +19,7 @@ model Publisher {
   @key("publisher") @visibility(Lifecycle.Read) id: string;
   @doc("The full resource name of the publisher.")
   @example("publishers/acme-publishing") path: string;
+  @doc("The display name of the publisher.")
   @example("Acme Publishing") displayName: string;
 }
 
@@ -30,7 +31,9 @@ model Book {
   @key("book") @visibility(Lifecycle.Read) id: string;
   @doc("The full resource name of the book.")
   @example("books/great-gatsby") path: string;
+  @doc("The title of the book.")
   @example("The Great Gatsby") title: string;
+  @doc("The ISBN of the book.")
   @example("978-0-7432-7356-5") isbn: string;
 }
 

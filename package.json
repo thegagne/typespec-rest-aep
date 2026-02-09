@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@aep_dev/aep-openapi-linter": "^0.5.1",
-    "@stoplight/prism-cli": "latest",
+    "@stoplight/prism-cli": "^5.14.2",
     "@stoplight/spectral-cli": "latest",
     "@typespec/compiler": "latest",
     "@typespec/http": "latest",
@@ -42,7 +42,7 @@
     "@typespec/openapi3": "latest",
     "@typespec/rest": "latest",
     "typescript": "~5.6.3",
-    "vitest": "^2.0.0",
+    "vitest": "^4.0.18",
     "yaml": "^2.8.2",
     "zudoku": "^0.68.1"
   }

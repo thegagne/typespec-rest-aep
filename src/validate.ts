@@ -127,16 +127,16 @@ function buildResourceExample(
     // Skip both key (id) and path in update bodies
     if (!includeKey && (isKey(program, prop) || prop.name === "path")) continue;
 
-    // For the key property (id), include it in response examples with a generated value
-    if (isKey(program, prop)) {
-      props.set(name, makeStringValue(program, `my-${metadata.singular}`));
-      continue;
-    }
-
     // Check for user-provided @example first
     const examples = getExamples(program, prop);
     if (examples.length > 0) {
       props.set(name, examples[0].value);
+      continue;
+    }
+
+    // For the key property (id), include it in response examples with a generated value
+    if (isKey(program, prop)) {
+      props.set(name, makeStringValue(program, `my-${metadata.singular}`));
       continue;
     }
 

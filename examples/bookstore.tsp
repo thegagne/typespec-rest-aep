@@ -15,6 +15,7 @@ namespace BookstoreAPI;
 @aepResource("library.example.com/publisher", "publisher", "publishers")
 model Publisher {
   @doc("The unique identifier of the publisher.")
+  @example("acme-publishing")
   @key("publisher") @visibility(Lifecycle.Read) id: string;
   path: string;
   @example("Acme Publishing") displayName: string;
@@ -24,6 +25,7 @@ model Publisher {
 @parentResource(Publisher)
 model Book {
   @doc("The unique identifier of the book.")
+  @example("great-gatsby")
   @key("book") @visibility(Lifecycle.Read) id: string;
   path: string;
   @example("The Great Gatsby") title: string;

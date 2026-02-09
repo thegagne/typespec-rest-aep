@@ -650,6 +650,17 @@ export function $onValidate(program: Program): void {
       },
     });
 
+    // Sort tags alphabetically
+    const stateMap = program.stateMap(tagsMetadataKey);
+    const tags = stateMap.get(service.type) as Record<string, { description?: string }> | undefined;
+    if (tags) {
+      const sorted: Record<string, { description?: string }> = {};
+      for (const key of Object.keys(tags).sort()) {
+        sorted[key] = tags[key];
+      }
+      stateMap.set(service.type, sorted);
+    }
+
     // Set operation IDs and tags by manually iterating interfaces and their operations
     for (const iface of service.type.interfaces.values()) {
       for (const op of iface.operations.values()) {

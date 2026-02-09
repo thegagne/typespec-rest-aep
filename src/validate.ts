@@ -10,7 +10,7 @@ import type {
   ArrayValue,
   ObjectValuePropertyDescriptor,
 } from "@typespec/compiler";
-import { $doc, $tag, getDoc, getExamples, isKey, listServices, navigateTypesInNamespace } from "@typespec/compiler";
+import { $doc, $summary, $tag, getDoc, getExamples, getSummary, isKey, listServices, navigateTypesInNamespace } from "@typespec/compiler";
 import { $ } from "@typespec/compiler/typekit";
 import {
   getResourceOperation,
@@ -470,7 +470,31 @@ const operationPrefixMap: Record<string, string> = {
   createOrReplace: "Apply",
 };
 
-function getOperationDocTemplate(
+function getOperationSummary(
+  opType: string,
+  metadata: AepResourceMetadata,
+): string {
+  const singular = capitalize(metadata.singular);
+  const plural = capitalize(metadata.plural);
+  switch (opType) {
+    case "read":
+      return `Get ${singular}`;
+    case "list":
+      return `List ${plural}`;
+    case "create":
+      return `Create ${singular}`;
+    case "update":
+      return `Update ${singular}`;
+    case "delete":
+      return `Delete ${singular}`;
+    case "createOrReplace":
+      return `Apply ${singular}`;
+    default:
+      return "";
+  }
+}
+
+function getOperationDescription(
   opType: string,
   metadata: AepResourceMetadata,
 ): string {
@@ -478,17 +502,17 @@ function getOperationDocTemplate(
   const plural = metadata.plural;
   switch (opType) {
     case "read":
-      return `Gets a ${singular}.`;
+      return `Gets a single ${singular} by its resource name.`;
     case "list":
-      return `Lists ${plural}.`;
+      return `Lists ${plural} with support for filtering, pagination, and sorting.`;
     case "create":
-      return `Creates a ${singular}.`;
+      return `Creates a new ${singular}. An optional \`id\` query parameter can be provided to set the resource identifier.`;
     case "update":
-      return `Updates a ${singular}.`;
+      return `Updates an existing ${singular} using merge-patch semantics. Only fields included in the request body are modified.`;
     case "delete":
       return `Deletes a ${singular}.`;
     case "createOrReplace":
-      return `Creates or replaces a ${singular}.`;
+      return `Creates or replaces a ${singular}. If the ${singular} already exists, it is fully replaced.`;
     default:
       return "";
   }
@@ -549,7 +573,11 @@ function setAepOperationId(program: Program, op: Operation): void {
     $operationId(fakeContext, op, operationId);
     $tag(fakeContext, op, getTagName(metadata));
 
-    const doc = getOperationDocTemplate(resOp.operation, metadata);
+    const summary = getOperationSummary(resOp.operation, metadata);
+    if (summary) {
+      $summary(fakeContext, op, summary);
+    }
+    const doc = getOperationDescription(resOp.operation, metadata);
     if (doc) {
       $doc(fakeContext, op, doc);
     }
@@ -577,6 +605,9 @@ function setAepOperationId(program: Program, op: Operation): void {
       const operationId = `:${capitalize(actionDetails.name)}${capitalize(resource.metadata.singular)}`;
       $operationId(fakeContext, op, operationId);
       $tag(fakeContext, op, getTagName(resource.metadata));
+      if (!getSummary(program, op)) {
+        $summary(fakeContext, op, `${capitalize(actionDetails.name)} ${capitalize(resource.metadata.singular)}`);
+      }
       const example = buildGetExample(program, resource.model, resource.metadata);
       setOpExample(program, op, example);
     }
@@ -591,6 +622,9 @@ function setAepOperationId(program: Program, op: Operation): void {
       const operationId = `:${capitalize(collectionAction.name)}${capitalize(resource.metadata.plural)}`;
       $operationId(fakeContext, op, operationId);
       $tag(fakeContext, op, getTagName(resource.metadata));
+      if (!getSummary(program, op)) {
+        $summary(fakeContext, op, `${capitalize(collectionAction.name)} ${capitalize(resource.metadata.plural)}`);
+      }
       const example = buildGetExample(program, resource.model, resource.metadata);
       setOpExample(program, op, example);
     }

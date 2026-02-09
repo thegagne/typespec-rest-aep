@@ -1,6 +1,6 @@
 # typespec-rest-aep
 
-A TypeSpec library for defining [AEP](https://aep.dev)-compliant REST APIs. Define your resources with a single decorator and get fully compliant OpenAPI 3.0 output validated by the official AEP linter.
+A TypeSpec library for defining [AEP](https://aep.dev)-compliant REST APIs. Define your resources with a single decorator and get fully compliant OpenAPI output validated by the official AEP linter.
 
 ## Quick Start
 

@@ -1,7 +1,7 @@
 import { createTypeSpecLibrary } from "@typespec/compiler";
 
 export const $lib = createTypeSpecLibrary({
-  name: "@typespec-rest-aep/core",
+  name: "typespec-rest-aep",
   diagnostics: {
     "aep-resource-requires-key": {
       severity: "error",

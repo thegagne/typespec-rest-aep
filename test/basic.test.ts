@@ -5,7 +5,7 @@ import { resolve } from "path";
 
 const tester = createTester(resolve(import.meta.dirname, ".."), {
   libraries: [
-    "@typespec-rest-aep/core",
+    "typespec-rest-aep",
     "@typespec/rest",
     "@typespec/openapi3",
   ],

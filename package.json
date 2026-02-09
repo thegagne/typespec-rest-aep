@@ -1,5 +1,5 @@
 {
-  "name": "@typespec-rest-aep/core",
+  "name": "typespec-rest-aep",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/src/index.js",

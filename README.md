@@ -1,11 +1,11 @@
-# @typespec-rest-aep/core
+# typespec-rest-aep
 
 A TypeSpec library for defining [AEP](https://aep.dev)-compliant REST APIs. Define your resources with a single decorator and get fully compliant OpenAPI 3.0 output validated by the official AEP linter.
 
 ## Quick Start
 
 ```typespec
-import "@typespec-rest-aep/core";
+import "typespec-rest-aep";
 
 using TypeSpec.Http;
 using TypeSpec.Rest;
@@ -70,7 +70,7 @@ This generates OpenAPI 3.0 with:
 ## Installation
 
 ```bash
-npm install @typespec-rest-aep/core
+npm install typespec-rest-aep
 ```
 
 Peer dependencies (install alongside):

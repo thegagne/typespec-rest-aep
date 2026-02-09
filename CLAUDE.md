@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A TypeSpec library (`@typespec-rest-aep/core`) that generates AEP-compliant OpenAPI 3.0 specs from TypeSpec definitions. Users define resources with `@aepResource` and compose standard CRUD interfaces. The `$onValidate` hook auto-generates operation IDs, tags, descriptions, examples, and `x-aep-resource` extensions.
+A TypeSpec library (`typespec-rest-aep`) that generates AEP-compliant OpenAPI 3.0 specs from TypeSpec definitions. Users define resources with `@aepResource` and compose standard CRUD interfaces. The `$onValidate` hook auto-generates operation IDs, tags, descriptions, examples, and `x-aep-resource` extensions.
 
 ## Build / Test / Lint Commands
 

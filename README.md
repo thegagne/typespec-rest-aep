@@ -20,11 +20,17 @@ namespace BookstoreAPI;
 model Publisher {
   @doc("The unique identifier of the publisher.")
   @example("acme-publishing")
-  @key("publisher") @visibility(Lifecycle.Read) id: string;
+  @key("publisher")
+  @visibility(Lifecycle.Read)
+  id: string;
+
   @doc("The full resource name of the publisher.")
-  @example("publishers/acme-publishing") path: string;
+  @example("publishers/acme-publishing")
+  path: string;
+
   @doc("The display name of the publisher.")
-  @example("Acme Publishing") displayName: string;
+  @example("Acme Publishing")
+  displayName: string;
 }
 
 @aepResource("library.example.com/book", "book", "books")
@@ -32,13 +38,21 @@ model Publisher {
 model Book {
   @doc("The unique identifier of the book.")
   @example("great-gatsby")
-  @key("book") @visibility(Lifecycle.Read) id: string;
+  @key("book")
+  @visibility(Lifecycle.Read)
+  id: string;
+
   @doc("The full resource name of the book.")
-  @example("books/great-gatsby") path: string;
+  @example("books/great-gatsby")
+  path: string;
+
   @doc("The title of the book.")
-  @example("The Great Gatsby") title: string;
+  @example("The Great Gatsby")
+  title: string;
+
   @doc("The ISBN of the book.")
-  @example("978-0-7432-7356-5") isbn: string;
+  @example("978-0-7432-7356-5")
+  isbn: string;
 }
 
 interface Publishers extends AepResourceOperations<Publisher> {}
@@ -114,11 +128,17 @@ Each AEP resource model should have:
 model Widget {
   @doc("The unique identifier of the widget.")
   @example("my-widget")
-  @key("widget") @visibility(Lifecycle.Read) id: string;
+  @key("widget")
+  @visibility(Lifecycle.Read)
+  id: string;
+
   @doc("The full resource name of the widget.")
-  @example("widgets/my-widget") path: string;
+  @example("widgets/my-widget")
+  path: string;
+
   @doc("The display name of the widget.")
-  @example("My Widget") displayName: string;
+  @example("My Widget")
+  displayName: string;
 }
 ```
 
@@ -194,16 +214,24 @@ Use `@parentResource` from `@typespec/rest` to define parent-child relationships
 ```typespec
 @aepResource("example.com/publisher", "publisher", "publishers")
 model Publisher {
-  @key("publisher") @visibility(Lifecycle.Read) id: string;
+  @key("publisher")
+  @visibility(Lifecycle.Read)
+  id: string;
+
   path: string;
+
   name: string;
 }
 
 @aepResource("example.com/book", "book", "books")
 @parentResource(Publisher)
 model Book {
-  @key("book") @visibility(Lifecycle.Read) id: string;
+  @key("book")
+  @visibility(Lifecycle.Read)
+  id: string;
+
   path: string;
+
   title: string;
 }
 ```

@@ -395,6 +395,11 @@ function setListResultsExample(
     const exampleItem = buildResourceExample(program, model, metadata);
     const exampleArray = makeArrayValue(program, [exampleItem]);
     setPropertyExample(program, resultsProp, exampleArray);
+
+    const nextPageTokenProp = variant.type.properties.get("next_page_token");
+    if (nextPageTokenProp) {
+      setPropertyExample(program, nextPageTokenProp, makeStringValue(program, ""));
+    }
     break;
   }
 }

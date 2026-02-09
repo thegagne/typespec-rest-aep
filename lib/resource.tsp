@@ -53,6 +53,7 @@ interface AepCreate<Resource extends {}> {
     ...ResourceCollectionParameters<Resource>,
     /** An optional client-provided identifier for the resource. */
     @query id?: string,
+    /** The resource to create. */
     @bodyRoot resource: Resource,
   ): Resource | AepError;
 }
@@ -69,6 +70,7 @@ interface AepUpdate<Resource extends {}> {
   update(
     ...ResourceParameters<Resource>,
     @header contentType: "application/merge-patch+json",
+    /** The resource fields to update. */
     @bodyRoot resource: Resource,
   ): Resource | AepError;
 }
@@ -94,7 +96,7 @@ interface AepDelete<Resource extends {}> {
 interface AepApply<Resource extends {}> {
   @autoRoute
   @createsOrReplacesResource(Resource)
-  apply(...ResourceParameters<Resource>, @bodyRoot resource: Resource): Resource | AepError;
+  apply(...ResourceParameters<Resource>, /** The resource to create or replace. */ @bodyRoot resource: Resource): Resource | AepError;
 }
 
 /**

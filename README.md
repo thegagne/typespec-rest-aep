@@ -66,7 +66,7 @@ interface Books extends AepResourceOperations<Book>, AepApply<Book> {
 }
 ```
 
-This generates OpenAPI 3.0 with:
+This generates OpenAPI with:
 
 - Correct paths: `/publishers/{publisher}`, `/publishers/{publisher}/books/{book}`
 - AEP operation IDs: `ListPublishers`, `GetPublisher`, `CreateBook`, `UpdateBook`, `DeleteBook`, `ApplyBook`

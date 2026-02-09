@@ -310,6 +310,7 @@ npm test         # Run tests (vitest)
 npm run example  # Compile the bookstore example
 npm run lint:aep # Lint the example output with AEP linter
 npm run mock     # Start a mock server on port 4010
+npm run preview  # Preview API docs at http://localhost:3000/api
 npm run watch    # Watch mode for TypeScript
 ```
 

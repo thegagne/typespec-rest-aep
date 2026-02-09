@@ -21,6 +21,7 @@
     "example": "tsp compile examples/bookstore.tsp --emit @typespec/openapi3",
     "lint:aep": "spectral lint tsp-output/@typespec/openapi3/openapi.json",
     "mock": "prism mock tsp-output/@typespec/openapi3/openapi.json --port 4010",
+    "preview": "zudoku dev",
     "test": "vitest run",
     "watch": "tsc -p tsconfig.build.json --watch"
   },
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@aep_dev/aep-openapi-linter": "^0.5.1",
+    "@stoplight/prism-cli": "latest",
     "@stoplight/spectral-cli": "latest",
     "@typespec/compiler": "latest",
     "@typespec/http": "latest",
@@ -41,7 +43,7 @@
     "@typespec/rest": "latest",
     "typescript": "~5.6.3",
     "vitest": "^2.0.0",
-    "@stoplight/prism-cli": "latest",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.2",
+    "zudoku": "^0.68.1"
   }
 }

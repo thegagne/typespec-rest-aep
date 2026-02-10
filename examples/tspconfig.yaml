@@ -1,5 +1,6 @@
 emit:
   - "@typespec/openapi3"
+output-dir: "{project-root}/../example-output"
 options:
   "@typespec/openapi3":
     output-file: openapi.json

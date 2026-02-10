@@ -1,5 +1,6 @@
 node_modules
 dist/
 tsp-output/
+.zudoku/
 *.tsbuildinfo
 .claude/settings.local.json

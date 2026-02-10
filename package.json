@@ -19,8 +19,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "example": "tsp compile examples/bookstore.tsp --emit @typespec/openapi3",
-    "lint:aep": "spectral lint tsp-output/@typespec/openapi3/openapi.json",
-    "mock": "prism mock tsp-output/@typespec/openapi3/openapi.json --port 4010",
+    "lint:aep": "spectral lint example-output/@typespec/openapi3/openapi.json",
+    "mock": "prism mock example-output/@typespec/openapi3/openapi.json --port 4010",
     "preview": "zudoku dev",
     "test": "vitest run",
     "watch": "tsc -p tsconfig.build.json --watch"

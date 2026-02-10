@@ -258,21 +258,21 @@ go install github.com/aep-dev/aepcli/cmd/aepcli@main
 
 ```bash
 # List available resources
-aepcli tsp-output/@typespec/openapi3/openapi.json --help
+aepcli example-output/@typespec/openapi3/openapi.json --help
 
 # List publishers
-aepcli tsp-output/@typespec/openapi3/openapi.json publisher list
+aepcli example-output/@typespec/openapi3/openapi.json publisher list
 
 # Create a publisher
-aepcli tsp-output/@typespec/openapi3/openapi.json publisher create acme-publishing \
+aepcli example-output/@typespec/openapi3/openapi.json publisher create acme-publishing \
   --displayName "Acme Publishing" \
   --path "publishers/acme-publishing"
 
 # List books under a publisher
-aepcli tsp-output/@typespec/openapi3/openapi.json book list --publisher acme-publishing
+aepcli example-output/@typespec/openapi3/openapi.json book list --publisher acme-publishing
 
 # Create a book
-aepcli tsp-output/@typespec/openapi3/openapi.json book create great-gatsby \
+aepcli example-output/@typespec/openapi3/openapi.json book create great-gatsby \
   --publisher acme-publishing \
   --title "The Great Gatsby" \
   --isbn "978-0-7432-7356-5" \
@@ -298,7 +298,7 @@ Compile and lint:
 
 ```bash
 tsp compile . --emit @typespec/openapi3
-npx spectral lint tsp-output/@typespec/openapi3/openapi.json
+npx spectral lint example-output/@typespec/openapi3/openapi.json
 ```
 
 ## Development

@@ -10,7 +10,7 @@ A TypeSpec library (`typespec-rest-aep`) that generates AEP-compliant OpenAPI 3.
 npm run build         # tsc -p tsconfig.build.json
 npm test              # vitest run
 npm run example       # tsp compile examples/bookstore.tsp --emit @typespec/openapi3
-npm run lint:aep      # spectral lint tsp-output/@typespec/openapi3/openapi.json
+npm run lint:aep      # spectral lint example-output/@typespec/openapi3/openapi.json
 npm run mock          # prism mock server on port 4010
 ```
 

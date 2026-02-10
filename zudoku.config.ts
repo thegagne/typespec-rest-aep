@@ -3,8 +3,12 @@ import type { ZudokuConfig } from "zudoku";
 const config: ZudokuConfig = {
   apis: {
     type: "file",
-    input: "./tsp-output/@typespec/openapi3/openapi.json",
-    path: "/api",
+    input: "./example-output/@typespec/openapi3/openapi.json",
+    path: "/",
+    options: {
+      expandApiInformation: false, // Control if API information section is expanded
+      schemaDownload: { enabled: true }, // Enable schema download button
+    }
   },
 };
 

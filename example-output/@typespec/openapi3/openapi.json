@@ -1,0 +1,2002 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bookstore API",
+    "contact": {
+      "name": "Bookstore API Support",
+      "email": "support@bookstore.example.com",
+      "url": "https://example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://www.example.com/license"
+    },
+    "description": "API for managing a bookstore.",
+    "version": "0.0.0"
+  },
+  "tags": [
+    {
+      "name": "Books",
+      "description": "Operations for managing books."
+    },
+    {
+      "name": "Publishers",
+      "description": "Operations for managing publishers."
+    }
+  ],
+  "paths": {
+    "/publishers": {
+      "get": {
+        "operationId": "ListPublishers",
+        "summary": "List Publishers",
+        "description": "Lists publishers with support for filtering, pagination, and sorting.",
+        "parameters": [
+          {
+            "name": "max_page_size",
+            "in": "query",
+            "required": false,
+            "description": "The maximum number of results to return per page.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "explode": false
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "description": "A page token from a previous list response, used to retrieve the next page.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "An AEP-160 filter expression to restrict results.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "required": false,
+            "description": "A comma-separated list of fields to order results by.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublisherListResponse"
+                },
+                "example": {
+                  "results": [
+                    {
+                      "id": "acme-publishing",
+                      "path": "publishers/acme-publishing",
+                      "displayName": "Acme Publishing"
+                    }
+                  ],
+                  "next_page_token": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Publishers"
+        ]
+      },
+      "post": {
+        "operationId": "CreatePublisher",
+        "summary": "Create Publisher",
+        "description": "Creates a new publisher. An optional `id` query parameter can be provided to set the resource identifier.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "An optional client-provided identifier for the resource.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Publisher"
+                },
+                "example": {
+                  "id": "acme-publishing",
+                  "path": "publishers/acme-publishing",
+                  "displayName": "Acme Publishing"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Publishers"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Publisher"
+              },
+              "example": {
+                "id": "acme-publishing",
+                "path": "publishers/acme-publishing",
+                "displayName": "Acme Publishing"
+              }
+            }
+          },
+          "description": "The resource to create."
+        }
+      }
+    },
+    "/publishers/{publisher}": {
+      "get": {
+        "operationId": "GetPublisher",
+        "summary": "Get Publisher",
+        "description": "Gets a single publisher by its resource name.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PublisherKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Publisher"
+                },
+                "example": {
+                  "id": "acme-publishing",
+                  "path": "publishers/acme-publishing",
+                  "displayName": "Acme Publishing"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Publishers"
+        ]
+      },
+      "patch": {
+        "operationId": "UpdatePublisher",
+        "summary": "Update Publisher",
+        "description": "Updates an existing publisher using merge-patch semantics. Only fields included in the request body are modified.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PublisherKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Publisher"
+                },
+                "example": {
+                  "id": "acme-publishing",
+                  "path": "publishers/acme-publishing",
+                  "displayName": "Acme Publishing"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Publishers"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublisherUpdate"
+              },
+              "example": {
+                "displayName": "Acme Publishing"
+              }
+            }
+          },
+          "description": "The resource fields to update."
+        }
+      },
+      "delete": {
+        "operationId": "DeletePublisher",
+        "summary": "Delete Publisher",
+        "description": "Deletes a publisher.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PublisherKey"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "There is no content to send for this request, but the headers may be useful. "
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Publishers"
+        ]
+      }
+    },
+    "/publishers/{publisher}/books": {
+      "get": {
+        "operationId": "ListBooks",
+        "summary": "List Books",
+        "description": "Lists books with support for filtering, pagination, and sorting.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookParentKey"
+          },
+          {
+            "name": "max_page_size",
+            "in": "query",
+            "required": false,
+            "description": "The maximum number of results to return per page.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "explode": false
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "description": "A page token from a previous list response, used to retrieve the next page.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "An AEP-160 filter expression to restrict results.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "required": false,
+            "description": "A comma-separated list of fields to order results by.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookListResponse"
+                },
+                "example": {
+                  "results": [
+                    {
+                      "id": "great-gatsby",
+                      "path": "books/great-gatsby",
+                      "title": "The Great Gatsby",
+                      "isbn": "978-0-7432-7356-5"
+                    }
+                  ],
+                  "next_page_token": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ]
+      },
+      "post": {
+        "operationId": "CreateBook",
+        "summary": "Create Book",
+        "description": "Creates a new book. An optional `id` query parameter can be provided to set the resource identifier.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookParentKey"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "An optional client-provided identifier for the resource.",
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                },
+                "example": {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              },
+              "example": {
+                "id": "great-gatsby",
+                "path": "books/great-gatsby",
+                "title": "The Great Gatsby",
+                "isbn": "978-0-7432-7356-5"
+              }
+            }
+          },
+          "description": "The resource to create."
+        }
+      }
+    },
+    "/publishers/{publisher}/books/{book}": {
+      "get": {
+        "operationId": "GetBook",
+        "summary": "Get Book",
+        "description": "Gets a single book by its resource name.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookKey.publisher"
+          },
+          {
+            "$ref": "#/components/parameters/BookKey.book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                },
+                "example": {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ]
+      },
+      "patch": {
+        "operationId": "UpdateBook",
+        "summary": "Update Book",
+        "description": "Updates an existing book using merge-patch semantics. Only fields included in the request body are modified.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookKey.publisher"
+          },
+          {
+            "$ref": "#/components/parameters/BookKey.book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                },
+                "example": {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookUpdate"
+              },
+              "example": {
+                "title": "The Great Gatsby",
+                "isbn": "978-0-7432-7356-5"
+              }
+            }
+          },
+          "description": "The resource fields to update."
+        }
+      },
+      "delete": {
+        "operationId": "DeleteBook",
+        "summary": "Delete Book",
+        "description": "Deletes a book.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookKey.publisher"
+          },
+          {
+            "$ref": "#/components/parameters/BookKey.book"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "There is no content to send for this request, but the headers may be useful. "
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ]
+      },
+      "put": {
+        "operationId": "ApplyBook",
+        "summary": "Apply Book",
+        "description": "Creates or replaces a book. If the book already exists, it is fully replaced.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookKey.publisher"
+          },
+          {
+            "$ref": "#/components/parameters/BookKey.book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                },
+                "example": {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              },
+              "example": {
+                "id": "great-gatsby",
+                "path": "books/great-gatsby",
+                "title": "The Great Gatsby",
+                "isbn": "978-0-7432-7356-5"
+              }
+            }
+          },
+          "description": "The resource to create or replace."
+        }
+      }
+    },
+    "/publishers/{publisher}/books/{book}:archive": {
+      "post": {
+        "operationId": ":ArchiveBook",
+        "summary": "Archive Book",
+        "description": "Archives a book.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BookKey.publisher"
+          },
+          {
+            "$ref": "#/components/parameters/BookKey.book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                },
+                "example": {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/bad-request",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "The request was invalid."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/unauthorized",
+                  "title": "Unauthorized",
+                  "status": 401,
+                  "detail": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/forbidden",
+                  "title": "Forbidden",
+                  "status": 403,
+                  "detail": "Permission denied."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/not-found",
+                  "title": "Not Found",
+                  "status": 404,
+                  "detail": "The resource was not found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/conflict",
+                  "title": "Conflict",
+                  "status": 409,
+                  "detail": "The resource already exists."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Standard error response following AEP-193.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aep.AepError"
+                },
+                "example": {
+                  "type": "https://example.com/errors/internal-server-error",
+                  "title": "Internal Server Error",
+                  "status": 500,
+                  "detail": "An internal error occurred."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Books"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "BookKey.book": {
+        "name": "book",
+        "in": "path",
+        "required": true,
+        "description": "The unique identifier of the book.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "BookKey.publisher": {
+        "name": "publisher",
+        "in": "path",
+        "required": true,
+        "description": "The unique identifier of the publisher.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "BookParentKey": {
+        "name": "publisher",
+        "in": "path",
+        "required": true,
+        "description": "The unique identifier of the publisher.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "PublisherKey": {
+        "name": "publisher",
+        "in": "path",
+        "required": true,
+        "description": "The unique identifier of the publisher.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Aep.AepError": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference",
+            "example": "https://example.com/errors/bad-request"
+          },
+          "title": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "example": "The request was invalid."
+          }
+        },
+        "description": "Standard error response following AEP-193."
+      },
+      "Book": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "title",
+          "isbn"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the book.",
+            "example": "great-gatsby",
+            "readOnly": true
+          },
+          "path": {
+            "type": "string",
+            "description": "The full resource name of the book.",
+            "example": "books/great-gatsby"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the book.",
+            "example": "The Great Gatsby"
+          },
+          "isbn": {
+            "type": "string",
+            "description": "The ISBN of the book.",
+            "example": "978-0-7432-7356-5"
+          }
+        },
+        "description": "A book",
+        "x-aep-resource": {
+          "singular": "book",
+          "plural": "books",
+          "type": "library.example.com/book",
+          "patterns": [
+            "publishers/{publisher}/books/{book}"
+          ]
+        }
+      },
+      "BookListResponse": {
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Book"
+            },
+            "description": "The list of resources.",
+            "example": [
+              {
+                "id": "great-gatsby",
+                "path": "books/great-gatsby",
+                "title": "The Great Gatsby",
+                "isbn": "978-0-7432-7356-5"
+              }
+            ]
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "Token to retrieve the next page of results. Empty if no more results.",
+            "example": ""
+          }
+        },
+        "description": "Paged list response for AEP resources.\nContains an array of results and a next_page_token for pagination."
+      },
+      "BookUpdate": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The full resource name of the book.",
+            "example": "books/great-gatsby"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the book.",
+            "example": "The Great Gatsby"
+          },
+          "isbn": {
+            "type": "string",
+            "description": "The ISBN of the book.",
+            "example": "978-0-7432-7356-5"
+          }
+        },
+        "description": "A book",
+        "x-aep-resource": {
+          "singular": "book",
+          "plural": "books",
+          "type": "library.example.com/book",
+          "patterns": [
+            "publishers/{publisher}/books/{book}"
+          ]
+        }
+      },
+      "Publisher": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "displayName"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the publisher.",
+            "example": "acme-publishing",
+            "readOnly": true
+          },
+          "path": {
+            "type": "string",
+            "description": "The full resource name of the publisher.",
+            "example": "publishers/acme-publishing"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of the publisher.",
+            "example": "Acme Publishing"
+          }
+        },
+        "description": "A publisher of books",
+        "x-aep-resource": {
+          "singular": "publisher",
+          "plural": "publishers",
+          "type": "library.example.com/publisher",
+          "patterns": [
+            "publishers/{publisher}"
+          ]
+        }
+      },
+      "PublisherListResponse": {
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Publisher"
+            },
+            "description": "The list of resources.",
+            "example": [
+              {
+                "id": "acme-publishing",
+                "path": "publishers/acme-publishing",
+                "displayName": "Acme Publishing"
+              }
+            ]
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "Token to retrieve the next page of results. Empty if no more results.",
+            "example": ""
+          }
+        },
+        "description": "Paged list response for AEP resources.\nContains an array of results and a next_page_token for pagination."
+      },
+      "PublisherUpdate": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The full resource name of the publisher.",
+            "example": "publishers/acme-publishing"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of the publisher.",
+            "example": "Acme Publishing"
+          }
+        },
+        "description": "A publisher of books",
+        "x-aep-resource": {
+          "singular": "publisher",
+          "plural": "publishers",
+          "type": "library.example.com/publisher",
+          "patterns": [
+            "publishers/{publisher}"
+          ]
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4010",
+      "description": "Mock server",
+      "variables": {}
+    }
+  ]
+}

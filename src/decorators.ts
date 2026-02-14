@@ -9,6 +9,7 @@ export interface AepResourceMetadata {
 }
 
 const aepResourceKey = $lib.stateKeys.aepResource;
+const aepCollectionFilterDocKey = $lib.stateKeys.aepCollectionFilterDoc;
 
 /**
  * Implementation of the @aepResource decorator.
@@ -49,4 +50,29 @@ export function getAepResourceMetadata(
  */
 export function isAepResource(program: Program, entity: Model): boolean {
   return program.stateMap(aepResourceKey).has(entity);
+}
+
+/**
+ * Implementation of the @aepCollectionFilterDoc decorator.
+ *
+ * Stores a custom filter parameter description for the list operation.
+ */
+export function $aepCollectionFilterDoc(
+  context: DecoratorContext,
+  entity: Model,
+  doc: string,
+) {
+  context.program.stateMap(aepCollectionFilterDocKey).set(entity, doc);
+}
+
+/**
+ * Get the custom filter parameter description for a resource model.
+ */
+export function getAepCollectionFilterDoc(
+  program: Program,
+  entity: Model,
+): string | undefined {
+  return program.stateMap(aepCollectionFilterDocKey).get(entity) as
+    | string
+    | undefined;
 }

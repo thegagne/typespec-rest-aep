@@ -19,7 +19,7 @@ import {
   getCollectionActionDetails,
 } from "@typespec/rest";
 import { $operationId, setExtension } from "@typespec/openapi";
-import { getAepResourceMetadata, type AepResourceMetadata } from "./decorators.js";
+import { getAepResourceMetadata, getAepCollectionFilterDoc, type AepResourceMetadata } from "./decorators.js";
 
 // Access the compiler's internal opExamples state using the global symbol registry.
 // The compiler uses Symbol.for("TypeSpec.opExamples") as the key.
@@ -414,7 +414,7 @@ const errorStatusCodes = [
 ];
 
 /**
- * Push error response examples for each AepError status code.
+ * Push error response examples for each ProblemDetails status code.
  * The emitter matches each example to the correct response via the `_` (statusCode) property.
  */
 function setErrorExamples(program: Program, op: Operation): void {
@@ -592,6 +592,15 @@ function setAepOperationId(program: Program, op: Operation): void {
     // Set example on list response `results` property for schema-level docs
     if (resOp.operation === "list") {
       setListResultsExample(program, op, resOp.resourceType, metadata);
+
+      // Apply custom filter parameter description if provided via @aepCollectionFilterDoc
+      const customFilterDoc = getAepCollectionFilterDoc(program, resOp.resourceType);
+      if (customFilterDoc) {
+        const filterParam = op.parameters.properties.get("filter");
+        if (filterParam) {
+          $doc(fakeContext, filterParam, customFilterDoc);
+        }
+      }
     }
     return;
   }

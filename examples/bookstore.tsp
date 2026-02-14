@@ -13,6 +13,7 @@ using Aep;
 namespace BookstoreAPI;
 
 @doc("A publisher of books")
+@aepCollectionFilterDoc("Filter publishers by display name. Example: `displayName = \"Acme\"`.")
 @aepResource("library.example.com/publisher", "publisher", "publishers")
 model Publisher {
   @doc("The unique identifier of the publisher.")
@@ -31,6 +32,7 @@ model Publisher {
 }
 
 @doc("A book")
+@aepCollectionFilterDoc("Filter books by title, author, or ISBN. Example: `title = \"The Great Gatsby\"` or `isbn = \"978-0-7432-7356-5\"`.")
 @aepResource("library.example.com/book", "book", "books")
 @parentResource(Publisher)
 model Book {
@@ -60,5 +62,5 @@ interface Books extends AepResourceOperations<Book>, AepApply<Book> {
   @action("archive")
   @actionSeparator(":")
   @post
-  archive(...ResourceParameters<Book>, @bodyRoot body: {}): Book | AepError;
+  archive(...ResourceParameters<Book>, @bodyRoot body: {}): Book | ProblemDetails;
 }

@@ -1,9 +1,10 @@
 namespace Aep;
 
 /**
- * Standard error response following AEP-193.
+ * Standard error response following RFC 9457 (Problem Details for HTTP APIs).
  */
-model AepError {
+@friendlyName("ProblemDetails")
+model ProblemDetails {
   @TypeSpec.Http.statusCode _: 400 | 401 | 403 | 404 | 409 | 500;
   @format("uri-reference") @example("https://example.com/errors/bad-request") type?: string;
   @example("Bad Request") title?: string;
@@ -12,7 +13,7 @@ model AepError {
 }
 
 /**
- * Paged list response for AEP resources.
+ * Paged list response.
  * Contains an array of results and a next_page_token for pagination.
  *
  * @template Resource The resource type being listed.

@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "info": {
     "title": "Bookstore API",
     "contact": {
@@ -56,7 +56,7 @@
             "name": "filter",
             "in": "query",
             "required": false,
-            "description": "An AEP-160 filter expression to restrict results.",
+            "description": "Filter publishers by display name. Example: `displayName = \"Acme\"`.",
             "schema": {
               "type": "string"
             },
@@ -95,11 +95,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -111,11 +111,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -127,11 +127,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -143,11 +143,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -159,11 +159,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -175,11 +175,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -228,11 +228,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -244,11 +244,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -260,11 +260,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -276,11 +276,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -292,11 +292,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -308,11 +308,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -372,11 +372,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -388,11 +388,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -404,11 +404,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -420,11 +420,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -436,11 +436,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -452,11 +452,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -498,11 +498,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -514,11 +514,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -530,11 +530,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -546,11 +546,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -562,11 +562,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -578,11 +578,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -626,11 +626,11 @@
             "description": "There is no content to send for this request, but the headers may be useful. "
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -642,11 +642,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -658,11 +658,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -674,11 +674,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -690,11 +690,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -706,11 +706,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -761,7 +761,7 @@
             "name": "filter",
             "in": "query",
             "required": false,
-            "description": "An AEP-160 filter expression to restrict results.",
+            "description": "Filter books by title, author, or ISBN. Example: `title = \"The Great Gatsby\"` or `isbn = \"978-0-7432-7356-5\"`.",
             "schema": {
               "type": "string"
             },
@@ -801,11 +801,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -817,11 +817,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -833,11 +833,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -849,11 +849,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -865,11 +865,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -881,11 +881,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -938,11 +938,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -954,11 +954,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -970,11 +970,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -986,11 +986,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1002,11 +1002,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1018,11 +1018,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1087,11 +1087,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -1103,11 +1103,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -1119,11 +1119,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -1135,11 +1135,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1151,11 +1151,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1167,11 +1167,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1217,11 +1217,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -1233,11 +1233,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -1249,11 +1249,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -1265,11 +1265,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1281,11 +1281,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1297,11 +1297,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1349,11 +1349,11 @@
             "description": "There is no content to send for this request, but the headers may be useful. "
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -1365,11 +1365,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -1381,11 +1381,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -1397,11 +1397,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1413,11 +1413,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1429,11 +1429,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1479,11 +1479,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -1495,11 +1495,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -1511,11 +1511,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -1527,11 +1527,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1543,11 +1543,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1559,11 +1559,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1628,11 +1628,11 @@
             }
           },
           "400": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/bad-request",
@@ -1644,11 +1644,11 @@
             }
           },
           "401": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/unauthorized",
@@ -1660,11 +1660,11 @@
             }
           },
           "403": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/forbidden",
@@ -1676,11 +1676,11 @@
             }
           },
           "404": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/not-found",
@@ -1692,11 +1692,11 @@
             }
           },
           "409": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/conflict",
@@ -1708,11 +1708,11 @@
             }
           },
           "500": {
-            "description": "Standard error response following AEP-193.",
+            "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Aep.AepError"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 },
                 "example": {
                   "type": "https://example.com/errors/internal-server-error",
@@ -1780,30 +1780,6 @@
       }
     },
     "schemas": {
-      "Aep.AepError": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "format": "uri-reference",
-            "example": "https://example.com/errors/bad-request"
-          },
-          "title": {
-            "type": "string",
-            "example": "Bad Request"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32",
-            "example": 400
-          },
-          "detail": {
-            "type": "string",
-            "example": "The request was invalid."
-          }
-        },
-        "description": "Standard error response following AEP-193."
-      },
       "Book": {
         "type": "object",
         "required": [
@@ -1816,23 +1792,31 @@
           "id": {
             "type": "string",
             "description": "The unique identifier of the book.",
-            "example": "great-gatsby",
+            "examples": [
+              "great-gatsby"
+            ],
             "readOnly": true
           },
           "path": {
             "type": "string",
             "description": "The full resource name of the book.",
-            "example": "books/great-gatsby"
+            "examples": [
+              "books/great-gatsby"
+            ]
           },
           "title": {
             "type": "string",
             "description": "The title of the book.",
-            "example": "The Great Gatsby"
+            "examples": [
+              "The Great Gatsby"
+            ]
           },
           "isbn": {
             "type": "string",
             "description": "The ISBN of the book.",
-            "example": "978-0-7432-7356-5"
+            "examples": [
+              "978-0-7432-7356-5"
+            ]
           }
         },
         "description": "A book",
@@ -1857,22 +1841,26 @@
               "$ref": "#/components/schemas/Book"
             },
             "description": "The list of resources.",
-            "example": [
-              {
-                "id": "great-gatsby",
-                "path": "books/great-gatsby",
-                "title": "The Great Gatsby",
-                "isbn": "978-0-7432-7356-5"
-              }
+            "examples": [
+              [
+                {
+                  "id": "great-gatsby",
+                  "path": "books/great-gatsby",
+                  "title": "The Great Gatsby",
+                  "isbn": "978-0-7432-7356-5"
+                }
+              ]
             ]
           },
           "next_page_token": {
             "type": "string",
             "description": "Token to retrieve the next page of results. Empty if no more results.",
-            "example": ""
+            "examples": [
+              ""
+            ]
           }
         },
-        "description": "Paged list response for AEP resources.\nContains an array of results and a next_page_token for pagination."
+        "description": "Paged list response.\nContains an array of results and a next_page_token for pagination."
       },
       "BookUpdate": {
         "type": "object",
@@ -1880,17 +1868,23 @@
           "path": {
             "type": "string",
             "description": "The full resource name of the book.",
-            "example": "books/great-gatsby"
+            "examples": [
+              "books/great-gatsby"
+            ]
           },
           "title": {
             "type": "string",
             "description": "The title of the book.",
-            "example": "The Great Gatsby"
+            "examples": [
+              "The Great Gatsby"
+            ]
           },
           "isbn": {
             "type": "string",
             "description": "The ISBN of the book.",
-            "example": "978-0-7432-7356-5"
+            "examples": [
+              "978-0-7432-7356-5"
+            ]
           }
         },
         "description": "A book",
@@ -1903,6 +1897,38 @@
           ]
         }
       },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference",
+            "examples": [
+              "https://example.com/errors/bad-request"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Bad Request"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "examples": [
+              400
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "The request was invalid."
+            ]
+          }
+        },
+        "description": "Standard error response following RFC 9457 (Problem Details for HTTP APIs)."
+      },
       "Publisher": {
         "type": "object",
         "required": [
@@ -1914,18 +1940,24 @@
           "id": {
             "type": "string",
             "description": "The unique identifier of the publisher.",
-            "example": "acme-publishing",
+            "examples": [
+              "acme-publishing"
+            ],
             "readOnly": true
           },
           "path": {
             "type": "string",
             "description": "The full resource name of the publisher.",
-            "example": "publishers/acme-publishing"
+            "examples": [
+              "publishers/acme-publishing"
+            ]
           },
           "displayName": {
             "type": "string",
             "description": "The display name of the publisher.",
-            "example": "Acme Publishing"
+            "examples": [
+              "Acme Publishing"
+            ]
           }
         },
         "description": "A publisher of books",
@@ -1950,21 +1982,25 @@
               "$ref": "#/components/schemas/Publisher"
             },
             "description": "The list of resources.",
-            "example": [
-              {
-                "id": "acme-publishing",
-                "path": "publishers/acme-publishing",
-                "displayName": "Acme Publishing"
-              }
+            "examples": [
+              [
+                {
+                  "id": "acme-publishing",
+                  "path": "publishers/acme-publishing",
+                  "displayName": "Acme Publishing"
+                }
+              ]
             ]
           },
           "next_page_token": {
             "type": "string",
             "description": "Token to retrieve the next page of results. Empty if no more results.",
-            "example": ""
+            "examples": [
+              ""
+            ]
           }
         },
-        "description": "Paged list response for AEP resources.\nContains an array of results and a next_page_token for pagination."
+        "description": "Paged list response.\nContains an array of results and a next_page_token for pagination."
       },
       "PublisherUpdate": {
         "type": "object",
@@ -1972,12 +2008,16 @@
           "path": {
             "type": "string",
             "description": "The full resource name of the publisher.",
-            "example": "publishers/acme-publishing"
+            "examples": [
+              "publishers/acme-publishing"
+            ]
           },
           "displayName": {
             "type": "string",
             "description": "The display name of the publisher.",
-            "example": "Acme Publishing"
+            "examples": [
+              "Acme Publishing"
+            ]
           }
         },
         "description": "A publisher of books",

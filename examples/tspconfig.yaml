@@ -5,3 +5,4 @@ options:
   "@typespec/openapi3":
     output-file: openapi.json
     file-type: json
+    openapi-versions: [ 3.1.0 ]

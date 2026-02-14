@@ -155,3 +155,39 @@ We noted that `@typespec/openapi` exports `getTagsMetadata()` as a public getter
 **Questions:**
 - Would you consider exporting `setTagsMetadata` or `OpenAPIKeys` from `@typespec/openapi`?
 - Is the `Symbol.for(\`${libName}/${key}\`)` convention for `stateKeys` considered stable API?
+
+---
+
+## 6. Duplicate path parameter components for parent/child resources
+
+When using `@parentResource` with `ResourceParameters<T>` and `ResourceCollectionParameters<T>`, the OpenAPI3 emitter generates separate but identical parameter components for the same path parameter. For example, a `Publisher` / `Book` parent-child relationship produces three distinct components that all represent the `publisher` path parameter:
+
+```json
+"components": {
+  "parameters": {
+    "PublisherKey": {
+      "name": "publisher", "in": "path", "required": true,
+      "description": "The unique identifier of the publisher."
+    },
+    "BookParentKey": {
+      "name": "publisher", "in": "path", "required": true,
+      "description": "The unique identifier of the publisher."
+    },
+    "BookKey.publisher": {
+      "name": "publisher", "in": "path", "required": true,
+      "description": "The unique identifier of the publisher."
+    }
+  }
+}
+```
+
+- `PublisherKey` — used by Publisher's own instance operations (Get/Update/Delete)
+- `BookParentKey` — used by Book's collection operations (List/Create)
+- `BookKey.publisher` — used by Book's instance operations (Get/Update/Delete/Apply)
+
+These are structurally identical but the emitter creates separate components because they originate from different TypeSpec key model types generated internally by `@typespec/rest`.
+
+**Questions:**
+- Is there a way to make `ResourceParameters<T>` and `ResourceCollectionParameters<T>` share the parent's key type instead of creating new ones?
+- Would the OpenAPI3 emitter consider deduplicating structurally identical parameter components?
+- Is there a recommended workaround (e.g., `@friendlyName` on the implicit key models) that wouldn't require post-processing the output?

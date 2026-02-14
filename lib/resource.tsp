@@ -17,7 +17,7 @@ using TypeSpec.OpenAPI;
 interface AepGet<Resource extends {}> {
   @autoRoute
   @readsResource(Resource)
-  get(...ResourceParameters<Resource>): Resource | AepError;
+  get(...ResourceParameters<Resource>): Resource | ProblemDetails;
 }
 
 /**
@@ -34,11 +34,11 @@ interface AepList<Resource extends {}> {
     @query max_page_size?: int32,
     /** A page token from a previous list response, used to retrieve the next page. */
     @query page_token?: string,
-    /** An AEP-160 filter expression to restrict results. */
+    /** A CEL filter expression to restrict results. */
     @query filter?: string,
     /** A comma-separated list of fields to order results by. */
     @query order_by?: string,
-  ): AepListResponse<Resource> | AepError;
+  ): AepListResponse<Resource> | ProblemDetails;
 }
 
 /**
@@ -55,7 +55,7 @@ interface AepCreate<Resource extends {}> {
     @query id?: string,
     /** The resource to create. */
     @bodyRoot resource: Resource,
-  ): Resource | AepError;
+  ): Resource | ProblemDetails;
 }
 
 /**
@@ -72,7 +72,7 @@ interface AepUpdate<Resource extends {}> {
     @header contentType: "application/merge-patch+json",
     /** The resource fields to update. */
     @bodyRoot resource: Resource,
-  ): Resource | AepError;
+  ): Resource | ProblemDetails;
 }
 
 /**
@@ -85,7 +85,7 @@ interface AepDelete<Resource extends {}> {
   @deletesResource(Resource)
   delete(...ResourceParameters<Resource>): {
     @TypeSpec.Http.statusCode _: 204;
-  } | AepError;
+  } | ProblemDetails;
 }
 
 /**
@@ -96,7 +96,7 @@ interface AepDelete<Resource extends {}> {
 interface AepApply<Resource extends {}> {
   @autoRoute
   @createsOrReplacesResource(Resource)
-  apply(...ResourceParameters<Resource>, /** The resource to create or replace. */ @bodyRoot resource: Resource): Resource | AepError;
+  apply(...ResourceParameters<Resource>, /** The resource to create or replace. */ @bodyRoot resource: Resource): Resource | ProblemDetails;
 }
 
 /**

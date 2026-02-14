@@ -1,4 +1,4 @@
-import { $aepResource } from "./decorators.js";
+import { $aepResource, $aepCollectionFilterDoc } from "./decorators.js";
 
 export { $lib } from "./lib.js";
 export { $onValidate } from "./validate.js";
@@ -7,5 +7,6 @@ export { $onValidate } from "./validate.js";
 export const $decorators = {
   Aep: {
     aepResource: $aepResource,
+    aepCollectionFilterDoc: $aepCollectionFilterDoc,
   },
 };

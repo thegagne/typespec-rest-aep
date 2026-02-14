@@ -115,6 +115,22 @@ The library automatically handles:
 - Sets schema-level examples on list response properties
 - Auto-generates a model description if none is provided via `@doc`
 
+### `@aepCollectionFilterDoc(doc)`
+
+Overrides the default filter parameter description on the list operation for this resource.
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `doc` | Custom description for the `filter` query parameter | `"Filter books by title or ISBN."` |
+
+By default, the `filter` query parameter on list operations has the description `"A CEL filter expression to restrict results."`. Use this decorator on a resource model to provide a more specific description:
+
+```typespec
+@aepCollectionFilterDoc("Filter books by title, author, or ISBN. Example: `title = \"The Great Gatsby\"`.")
+@aepResource("library.example.com/book", "book", "books")
+model Book { ... }
+```
+
 ### Resource Model Convention
 
 Each AEP resource model should have:
@@ -169,6 +185,18 @@ interface Widgets extends AepResourceOperations<Widget>, AepApply<Widget> {}
 
 // Read-only
 interface Widgets extends AepGet<Widget>, AepList<Widget> {}
+
+// List + Create only, with a custom filter description
+@aepCollectionFilterDoc("Filter widgets by displayName or status. Example: `displayName = \"My Widget\"`.")
+@aepResource("example.com/widget", "widget", "widgets")
+model Widget {
+  @key("widget") @visibility(Lifecycle.Read) id: string;
+  path: string;
+  displayName: string;
+  status: string;
+}
+
+interface Widgets extends AepList<Widget>, AepCreate<Widget> {}
 ```
 
 ### Custom Methods (AEP-136)
@@ -319,7 +347,7 @@ npm run watch    # Watch mode for TypeScript
 ```
 lib/
   main.tsp          # Library entry point (imports JS + TSP files)
-  decorators.tsp    # @aepResource decorator declaration
+  decorators.tsp    # @aepResource, @aepCollectionFilterDoc decorator declarations
   models.tsp        # AepError, AepListResponse
   resource.tsp      # Template interfaces (AepGet, AepList, etc.)
 src/
@@ -329,7 +357,7 @@ src/
   tsp-index.ts      # Decorator registry ($decorators map, $onValidate export)
   index.ts          # Public JS exports
 test/
-  basic.test.ts     # Tests (16 tests covering all operations and features)
+  basic.test.ts     # Tests (17 tests covering all operations and features)
 examples/
   bookstore.tsp     # Full bookstore example (Publisher + Book resources)
 ```

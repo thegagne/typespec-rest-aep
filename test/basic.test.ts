@@ -317,7 +317,7 @@ describe("OpenAPI output", () => {
         @action("archive")
         @actionSeparator(":")
         @post
-        archive(...ResourceParameters<Widget>): Widget | AepError;
+        archive(...ResourceParameters<Widget>): Widget | ProblemDetails;
       }
     `);
 
@@ -418,6 +418,28 @@ describe("OpenAPI output", () => {
     expect(response200.example.name).toBe("Acme Widget");
     // path should still be auto-generated since no @example on it
     expect(response200.example.path).toContain("my-widget");
+  });
+
+  it("should override filter parameter description with @aepCollectionFilterDoc", async () => {
+    const openapi = await openApiTester.compile(`
+      @service(#{ title: "Test API" })
+      namespace TestAPI;
+
+      @aepCollectionFilterDoc("Filter books by title, author, or ISBN.")
+      @aepResource("test.example.com/widget", "widget", "widgets")
+      model Widget {
+        @key("widget") @visibility(Lifecycle.Read) id: string;
+        path: string;
+        name: string;
+      }
+
+      interface Widgets extends AepResourceOperations<Widget> {}
+    `);
+
+    const listOp = openapi.paths["/widgets"].get;
+    const filterParam = listOp.parameters.find((p: any) => p.name === "filter");
+    expect(filterParam).toBeDefined();
+    expect(filterParam.description).toBe("Filter books by title, author, or ISBN.");
   });
 
   it("should support selective interface composition (read-only)", async () => {

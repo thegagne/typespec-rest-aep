@@ -12,3 +12,10 @@ namespace Aep;
  * @param plural The plural name of the resource (e.g., "books").
  */
 extern dec aepResource(target: Model, type: valueof string, singular: valueof string, plural: valueof string);
+
+/**
+ * Overrides the default filter parameter description on the list operation for this resource.
+ *
+ * @param doc The custom description for the `filter` query parameter.
+ */
+extern dec aepCollectionFilterDoc(target: Model, doc: valueof string);

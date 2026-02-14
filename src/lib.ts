@@ -19,6 +19,7 @@ export const $lib = createTypeSpecLibrary({
   },
   state: {
     aepResource: { description: "State for the @aepResource decorator." },
+    aepCollectionFilterDoc: { description: "State for the @aepCollectionFilterDoc decorator." },
   },
 });
 
